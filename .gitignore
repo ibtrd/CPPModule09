@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+ex00/btc
+
+# Misc
+*/.vscode
