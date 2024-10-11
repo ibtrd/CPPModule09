@@ -6,7 +6,7 @@
 #    By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 22:47:55 by ibertran          #+#    #+#              #
-#    Updated: 2024/09/30 21:20:56 by ibertran         ###   ########lyon.fr    #
+#    Updated: 2024/10/11 03:32:35 by ibertran         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ DEPS = $(patsubst %.o,%.d,$(OBJS))
 SRC = \
 	main \
 	BitcoinExchange \
+	Date \
 
 # *** LIBRARIES && INCLUDES  ************************************************* #
 
