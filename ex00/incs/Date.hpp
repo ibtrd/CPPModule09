@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 03:04:51 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/11 04:09:00 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/12 15:55:48 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define DATE_HPP
 
 #include <stdint.h>
-#include <ostream>
 
 class Date
 {
@@ -25,26 +24,34 @@ class Date
 
 	public:
 		Date(void);
-		Date(const Date &);
-		Date(int32_t, int32_t, int32_t);
+		Date(const Date &other);
+		Date(int32_t year, int32_t month, int32_t day);
+		Date(const std::string &string);
 
 		~Date(void);
 
-		Date	&operator=(const Date &);
+		Date	&operator=(const Date &other);
+		Date	&operator++(void);
+		Date	operator++(int);
 
-		bool	isValidDate(void) const;
+		bool	operator==(const Date &other) const;
+		bool	operator!=(const Date &other) const;
+		bool	operator<(const Date &other) const;
 
-		static bool	isLeapYear(int32_t);
+		bool		isValidDate(void) const;
+		std::string	toString(void) const;
+
+		static bool	isLeapYear(int32_t year);
 
 		int32_t	getYear(void) const;
 		int32_t	getMonth(void) const;
 		int32_t	getDay(void) const;
 
-		class InvalidDate : public std::exception {
+		class InvalidDateException : public std::exception {
 			const char* what(void) const throw();
 		};
 };
 
-std::ostream	&operator<<(std::ostream &, const Date &date);
+std::ostream	&operator<<(std::ostream &os, const Date &date);
 
 #endif /* ******************************************************************* */

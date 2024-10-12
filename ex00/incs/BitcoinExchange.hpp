@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:58:24 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/11 03:34:00 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/12 17:45:23 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 # define BITCOINEXCHANGE_HPP
 
 # include <map>
-# include <utility>
-# include <string>
 
-#include <Date.hpp>
+# include <Date.hpp>
 
 class BitcoinExchange
 {
 	private:
-		std::map<std::string, float>	_prices;
+		std::map<Date, float>	_prices;
 
-		void	_parseDatabase(void);
-		void	_addEntry(std::string &);
+		void	_parseDatabase(const std::string &path);
+		void	_evaluateQuery(const std::string &str) const;
 
 	public:
 		BitcoinExchange(void);
-		BitcoinExchange(const BitcoinExchange &);
+		BitcoinExchange(const BitcoinExchange &other);
+		BitcoinExchange(const std::string &path);
 
 		~BitcoinExchange(void);
 
-		BitcoinExchange	&operator=(const BitcoinExchange &);
+		BitcoinExchange	&operator=(const BitcoinExchange &other);
+
+		void	parseQueryFile(const std::string &path) const;
+
+		class InvalidDatabaseException : public std::exception {
+			const char* what(void) const throw();
+		};
 };
 
 #endif /* ******************************************************************* */

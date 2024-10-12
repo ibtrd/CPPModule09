@@ -6,23 +6,26 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:58:22 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/11 04:16:12 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/12 20:46:11 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "BitcoinExchange.hpp"
 
 /* CONSTRUCTORS ************************************************************* */
 
-BitcoinExchange::BitcoinExchange(void) {
-	this->_parseDatabase();
-}
+BitcoinExchange::BitcoinExchange(void) {}
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) {
 	*this = other;
+}
+
+BitcoinExchange::BitcoinExchange(const std::string &path) {
+	this->_parseDatabase(path);
 }
 
 BitcoinExchange::~BitcoinExchange(void) {}
@@ -36,23 +39,17 @@ BitcoinExchange	&BitcoinExchange::operator=(const BitcoinExchange &other) {
 	return (*this);
 }
 
-void BitcoinExchange::_addEntry(std::string &str) {
-	std::pair<std::string, float> pair = std::make_pair("Kageyama", 180.6);
-	this->_prices.insert(pair);
+/* ************************************************************************** */
 
-	(void)str;
-}
-
-void BitcoinExchange::_parseDatabase(void) {
-	std::ifstream	infile("database/data.csv");
+void BitcoinExchange::_parseDatabase(const std::string &path) {
+	std::ifstream	infile(path.c_str());
 	std::string		line;
 
 	if (!infile.is_open())
-		throw std::runtime_error("Error: could not open file.");
+		throw InvalidDatabaseException();
 	std::getline(infile, line);
 	if (line.compare("date,exchange_rate"))
-		throw std::runtime_error("error: database/data.csv: invalid file");
-
+		throw InvalidDatabaseException();
 	do {
 		int32_t year, month, day;
 		char	sep[3];
@@ -63,17 +60,82 @@ void BitcoinExchange::_parseDatabase(void) {
 			break;
 		}
 		if (sep[0] != '-' || sep[1] != '-' || sep[2] != ',' || infile.fail()) {
-			throw std::runtime_error("Error: IDSFSFSDF.");
+			throw InvalidDatabaseException();
 		}
-
-		std::cerr << Date(year, month, day) << std::endl;
-		// // std::cerr << "fail=" << infile.fail() << "good=" << infile.good() << "fail=" << infile.bad() << "fail=" << infile.eof() << std::endl;
-		// std::cerr << "debug: Y " << year << " M " << month << " D " << day << " -R " << rate << "errno= " << infile.rdstate() << std::endl;
+		try {
+			Date	date(year, month, day);
+			this->_prices[date] = rate;
+		} catch (std::exception &e) {
+			throw InvalidDatabaseException();
+		}
 	} while (infile.good());
 }
 
-/* ************************************************************************** */
+void	BitcoinExchange::parseQueryFile(const std::string &path) const {
+	std::ifstream	infile(path.c_str());
+	std::string		line;
 
-/* GETTERS ****************************************************************** */
+	if (!infile.is_open()) {
+		std::cout << "Error: could not open file." << std::endl;
+		return ;
+	}
+	std::getline(infile, line);
+	if (line.compare("date | value")) {
+		std::cout << "Error: invalid input file." << std::endl;
+		return ;
+	}
+
+	while (!std::getline(infile, line).eof()) {
+		if (line.size() == 0) {
+			continue;
+		}
+		this->_evaluateQuery(line);
+	}
+}
+
+void	BitcoinExchange::_evaluateQuery(const std::string &str) const {
+	const std::string::size_type	n = str.find(" | ");
+	if (std::string::npos == n) {
+		std::cout << "Error: bad input => " << str << std::endl;
+		return ;
+	}
+
+	Date	date;
+	try {
+		date = Date(str.substr(0, n));
+	} catch (std::exception &e) {
+		std::cout << "Error: " << e.what() << std::endl;
+		return ;
+	}
+	
+	float				bitcoins;
+	std::stringstream	ss(str);
+	ss.ignore(n + 3);
+	ss >> bitcoins;
+
+	if (!ss.eof()) {
+		std::cout << "Error: bad input => " << str << std::endl;
+		return ;
+	}
+	if (bitcoins > 1000) {
+		std::cout << "Error: too large a number" << std::endl;
+		return ;
+	} else if (bitcoins < 0) {
+		std::cout << "Error: negative number" << std::endl;
+		return ;	
+	}
+
+	std::map<Date, float>::const_iterator 	rate = this->_prices.upper_bound(date);
+	if (rate == this->_prices.begin()) {
+		std::cout << "Error: bad input => " << str << std::endl;
+	} else {
+		--rate;
+		std::cout << date << " => " << bitcoins << " = " << (rate->second * bitcoins) << std::endl;
+	}
+}
 
 /* EXCEPTIONS *************************************************************** */
+
+const char* BitcoinExchange::InvalidDatabaseException::what(void) const throw() {
+	return ("Invalid database");
+}
