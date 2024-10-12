@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 21:01:45 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/13 00:09:17 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/13 01:00:46 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,13 @@ RPN::RPN(const std::string &str) {
 					break;
 				}
 			}
-			this->operation(static_cast<RPNop_t>(op));
+			this->_operation(static_cast<RPNop_t>(op));
 		}
+	}
+	if (this->_stack.size() != 1) {
+		throw RPNException();
+	} else {
+		std::cout << this->_stack.top() << std::endl;
 	}
 }
 
@@ -61,7 +66,7 @@ RPN	&RPN::operator=(const RPN &other)
 
 /* ************************************************************************** */
 
-void	RPN::operation(RPNop_t op) {
+void	RPN::_operation(RPNop_t op) {
 	if (this->_stack.size() < 2 || OPERATORS == op) {
 		throw RPNException();
 	}
@@ -84,13 +89,6 @@ void	RPN::operation(RPNop_t op) {
 	} else {
 		throw RPNException();
 	}
-}
-
-void	RPN::displayTop(void) const {
-	if (this->_stack.size() == 0) {
-		throw RPNException();
-	}
-	std::cout << this->_stack.top() << std::endl;
 }
 
 /* EXCEPTIONS *************************************************************** */

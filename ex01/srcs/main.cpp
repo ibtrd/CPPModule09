@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:59:17 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/13 00:12:02 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/13 01:00:07 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int main(int ac, char **av)
 
 	try {
 		RPN	rpn(av[1]);
-		rpn.displayTop();
 	} catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 		return 1;
