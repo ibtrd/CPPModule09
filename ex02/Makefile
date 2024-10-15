@@ -6,7 +6,7 @@
 #    By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 22:47:55 by ibertran          #+#    #+#              #
-#    Updated: 2024/10/13 00:26:13 by ibertran         ###   ########lyon.fr    #
+#    Updated: 2024/10/16 04:04:34 by ibertran         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ DEPS = $(patsubst %.o,%.d,$(OBJS))
 
 SRC = \
 	main \
-	PmergeMe \
 
 # *** LIBRARIES && INCLUDES  ************************************************* #
 
@@ -103,7 +102,12 @@ re : fclean
 
 .PHONY : run
 run : $(NAME)
-	./$(NAME)
+	./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+
+.PHONY : test
+test : debug
+	valgrind -q ./$(NAME) `shuf -i 10-99 -n 12 | tr "\n" " "`
+	@# valgrind -q ./$(NAME) 0 5 6 2 3 1 4 9
 
 .PHONY : print-%
 print-% :
