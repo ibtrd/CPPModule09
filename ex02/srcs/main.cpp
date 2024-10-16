@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:59:17 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/16 04:56:58 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/16 06:30:20 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <vector>
 #include <deque>
 
-#include "PmergeMe2.hpp"
+#include "PmergeMe.hpp"
 
 int main(int ac, char **av) {
 	if (ac < 2) {
@@ -23,15 +23,13 @@ int main(int ac, char **av) {
 	}
 	{
 		PmergeMe<std::vector>	test;
-		// for (int i = 1; i < ac; ++i) {
-		// 	if (test.addArg(av[i])) {
-		// 		std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
-		// 		return 1;
-		// 	}
-		// }
-		// test.displayContent();
-		// test.sort();
-		// test.displayContent();
+		for (int i = 1; i < ac; ++i) {
+			if (test.addArg(av[i])) {
+				std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
+				return 1;
+			}
+		}
+		test.sort();
 		// if (false == test.isSorted()) {
 		// 	std::cout << "Container is not sorted!" << std::endl;
 		// }
@@ -48,4 +46,5 @@ int main(int ac, char **av) {
 	// 	test.sort();
 	// }
 	return 0;
+	(void)av;
 }

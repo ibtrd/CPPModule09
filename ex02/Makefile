@@ -6,7 +6,7 @@
 #    By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/13 22:47:55 by ibertran          #+#    #+#              #
-#    Updated: 2024/10/16 04:04:34 by ibertran         ###   ########lyon.fr    #
+#    Updated: 2024/10/16 09:18:05 by ibertran         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,8 +106,7 @@ run : $(NAME)
 
 .PHONY : test
 test : debug
-	valgrind -q ./$(NAME) `shuf -i 10-99 -n 12 | tr "\n" " "`
-	@# valgrind -q ./$(NAME) 0 5 6 2 3 1 4 9
+	valgrind ./$(NAME) `shuf -i 10-99 -n 33 | tr "\n" " "`
 
 .PHONY : print-%
 print-% :
