@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:59:17 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/16 06:30:20 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/17 01:40:13 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int main(int ac, char **av) {
 		return (1);
 	}
 	{
-		PmergeMe<std::vector>	test;
+		PmergeMe<std::vector>	test("std::vector");
 		for (int i = 1; i < ac; ++i) {
 			if (test.addArg(av[i])) {
 				std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
@@ -30,21 +30,18 @@ int main(int ac, char **av) {
 			}
 		}
 		test.sort();
-		// if (false == test.isSorted()) {
-		// 	std::cout << "Container is not sorted!" << std::endl;
-		// }
 	}
-	// std::cout << std::endl;
-	// {
-	// 	PmergeMe<std::deque<uint32_t> >	test;
-	// 	for (int i = 1; i < ac; ++i) {
-	// 		if (test.addArg(av[i])) {
-	// 			std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
-	// 			return 1;
-	// 		}
-	// 	}
-	// 	test.sort();
-	// }
+	std::cout << std::endl;
+	{
+		PmergeMe<std::deque>	test("std::deque");
+		for (int i = 1; i < ac; ++i) {
+			if (test.addArg(av[i])) {
+				std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
+				return 1;
+			}
+		}
+		test.sort();
+	}
 	return 0;
 	(void)av;
 }

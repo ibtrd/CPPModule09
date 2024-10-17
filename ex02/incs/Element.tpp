@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 05:45:19 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/16 09:10:01 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/17 00:08:04 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ Element<T>::Element(const Element &other) {
 template <template <typename, typename> class T>
 Element<T>::Element(const uint32_t value) {
 	this->_e.push_back(value);
-	this->_size = 1;
 }
 
 template <template <typename, typename> class T>
@@ -38,31 +37,30 @@ Element<T>	&Element<T>::operator=(const Element &other) {
 	if (this == &other)
 		return (*this);
 	this->_e = other._e;
-	this->_size = other._size;
 	return (*this);
 }
 
 template <template <typename, typename> class T>
 bool	Element<T>::operator<(const Element &other) const {
-	return (this->_e[0] < other._e[0]);
+	return (this->_e.front() < other._e.front());
 }
 
 template <template <typename, typename> class T>
 bool	Element<T>::operator>(const Element &other) const {
-	return (this->_e[0] > other._e[0]);
+	return (this->_e.front() > other._e.front());
 }
 
 /* ************************************************************************** */
 
 template <template <typename, typename> class T>
 void	Element<T>::_sort(void) {
-	if (this->_e[0] > this->_e[this->_size]) {
+	if (this->_e[0] > this->_e[this->pairSize()]) {
 		return;
 	}
-	for (uint32_t i = 0; i < this->_size; ++i) {
+	for (uint32_t i = 0; i < this->pairSize(); ++i) {
 		const uint32_t swap = this->_e[i];
-		this->_e[i] = this->_e[i + this->_size];
-		this->_e[i + this->_size] = swap;
+		this->_e[i] = this->_e[i + this->pairSize()];
+		this->_e[i + this->pairSize()] = swap;
 	}
 }
 
@@ -71,7 +69,6 @@ void	Element<T>::_sort(void) {
 template <template <typename, typename> class T>
 void	Element<T>::push(uint32_t n) {
 	this->_e.push_back(n);
-	this->_size = 1;
 }
 
 template <template <typename, typename> class T>
@@ -80,16 +77,25 @@ void	Element<T>::pair(const Element &other) {
 		this->_e.push_back(other._e[i]);
 	}
 	this->_sort();
-	this->_size <<= 1;
 }
 
 template <template <typename, typename> class T>
 void	Element<T>::depair(Element &other) {
-	this->_size >>= 1;
-	other._size = this->_size;
-	for (uint32_t i = 0; i < this->_size; ++i) {
-		other._e.push_back(this->_e[this->_size]);
-		this->_e.erase(this->_e.begin() + this->_size);
+	const uint32_t size = this->pairSize();
+
+	for (uint32_t i = 0; i < size; ++i) {
+		other._e.push_back(this->_e[size + i]);
+	}
+	for (uint32_t i = 0; i < size; ++i) {
+		this->_e.pop_back();
+	}
+}
+
+template <template <typename, typename> class T>
+void	Element<T>::depair(Element &other, const uint32_t size) {
+	for (uint32_t i = 0; i < size; ++i) {
+		other._e.push_back(this->_e.front());
+		this->_e.erase(this->_e.begin());
 	}
 }
 
@@ -110,7 +116,6 @@ void	Element<T>::display(void) const {
 template <template <typename, typename> class T>
 void	Element<T>::clear(void) {
 	this->_e.clear();
-	this->_size = 0;
 }
 
 
@@ -118,7 +123,12 @@ void	Element<T>::clear(void) {
 
 template <template <typename, typename> class T>
 uint32_t	Element<T>::size(void) const {
-	return (this->_size);
+	return (this->_e.size());
+}
+
+template <template <typename, typename> class T>
+uint32_t	Element<T>::pairSize(void) const {
+	return (this->_e.size() >> 1);
 }
 
 template <template <typename, typename> class T>
