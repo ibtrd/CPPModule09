@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 05:43:30 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/16 23:36:36 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/18 00:27:14 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ private:
 	void	_sort(void);
 	
 public:
+	uint32_t	parent;
 	Element(void);
 	Element(const Element &other);
 	Element(uint32_t value);
@@ -35,13 +36,11 @@ public:
 	bool	operator<(const Element &other) const;
 	bool	operator>(const Element &other) const;
 
-	void	push(uint32_t value);
-	void	pair(const Element &other);
-	void	depair(Element &other);
-	void	depair(Element &other, const uint32_t size);
+	void		push(uint32_t value);
+	void		pair(const Element &other);
+	Element<T>	unpair(const uint32_t size);
 
 	void	display(void) const;
-	void	clear(void);
 
 	uint32_t	size(void) const;
 	uint32_t	pairSize(void) const;

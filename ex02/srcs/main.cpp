@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:59:17 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/17 01:40:13 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/17 20:59:24 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,16 @@ int main(int ac, char **av) {
 		}
 		test.sort();
 	}
-	std::cout << std::endl;
-	{
-		PmergeMe<std::deque>	test("std::deque");
-		for (int i = 1; i < ac; ++i) {
-			if (test.addArg(av[i])) {
-				std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
-				return 1;
-			}
-		}
-		test.sort();
-	}
+	// std::cout << std::endl;
+	// {
+	// 	PmergeMe<std::deque>	test("std::deque");
+	// 	for (int i = 1; i < ac; ++i) {
+	// 		if (test.addArg(av[i])) {
+	// 			std::cout << "Error: " << av[i] << ": invalid argument" << std::endl;
+	// 			return 1;
+	// 		}
+	// 	}
+	// 	test.sort();
+	// }
 	return 0;
-	(void)av;
 }

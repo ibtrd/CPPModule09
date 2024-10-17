@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 04:39:59 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/17 05:26:02 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/17 19:50:03 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ private:
 
 
 	void	_display(const std::string &str) const;
+	void	_display(const std::string &str, const T<Element<T>, std::allocator<Element<T> > > &sorted) const;
 	void	_sort(const uint32_t pairSize);
 	void	_pair(void);
 	void	_insert(const uint32_t size);

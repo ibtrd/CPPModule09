@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 04:40:59 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/17 18:20:37 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/18 00:50:20 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "PmergeMe.hpp"
 
 template <template <typename, typename> class T>
- uint32_t	PmergeMe<T>::jacobsthals[66] = {3, 5, 11, 21, 43, 85, 171, 341,
+ uint32_t	PmergeMe<T>::jacobsthals[66] = {1, 3, 5, 11, 21, 43, 85, 171, 341,
  683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525};
 
 /* CONSTRUCTORS ************************************************************* */
@@ -80,48 +80,87 @@ void	PmergeMe<T>::_pair(void) {
 template <template <typename, typename> class T>
 void	PmergeMe<T>::_insert(const uint32_t size) {
 	T<Element<T>, std::allocator<Element<T> > > sorted;
-	Element<T>									element;
+	Element<T>									unpair;
+	Element<T>									remainder;
 
-	// this->_display("\tSTART: ");
-	this->_c.front().depair(element);
-	// sorted.push_back(element);
-	// sorted.push_back(this->_c.front());
-	this->_c.insert(this->_c.begin(), element);
-	// sorted.insert(this->_c.begin(), this->_c.front());
-
-	element.clear();
-	// uint32_t j = 1;
-	// while (PmergeMe<T>::jacobsthals[j - 1] < this->_c.size()) {
-	// 	uint32_t	end = PmergeMe<T>::jacobsthals[j - 1];
-	// 	this->_display("\tJACOB: ");
-		
-	// 	for (uint32_t start = PmergeMe<T>::jacobsthals[j]; start != end; ++start) {
-	// 		if (start >= this->_c.size()) {
-	// 			continue;
+	this->_display("\tSTART: ");
+	// std::cout << std::endl;
+	
+	// unpair = this->_c.front().unpair();
+	// this->_c.insert(this->_c.begin(), unpair);
+	// for (uint32_t i = 2; i < this->_c.size(); i += 2) {
+	// 		// std::cout << "inserting: " << this->_c[i].size() << "\t";
+	// 	if (this->_c[i].size() == size) {
+	// 		unpair = this->_c[i].unpair();
+	// 		this->_c.insert(std::lower_bound(this->_c.begin(), this->_c.begin() + i, unpair), unpair);
+	// 		// this->_display("\t\t THEN:   ");
+	// 	} else if (this->_c[i].size() >= (size >> 1)) {
+	// 		unpair = this->_c[i].unpair(size >> 1);
+	// 		if (this->_c[i].size() == 0) {
+	// 			this->_c.pop_back();
 	// 		}
+	// 		this->_c.insert(std::lower_bound(this->_c.begin(), this->_c.begin() + i, unpair), unpair);
+	// 		// this->_display("\t\t THEN:   ");
 	// 	}
 	// }
 
-	for (uint32_t i = 2; i < this->_c.size(); i += 2) {
-			// std::cout << "inserting: " << this->_c[i].size() << "\t";
-		if (this->_c[i].size() == size) {
-			this->_c[i].depair(element);
-			this->_c.insert(std::lower_bound(this->_c.begin(), this->_c.begin() + i, element), element);
-			element.clear();
-			// this->_display("\t\t THEN:   ");
-		} else if (this->_c[i].size() >= (size >> 1)) {
-			this->_c[i].depair(element, size >> 1);
-			if (this->_c[i].size() == 0) {
-				this->_c.pop_back();
+	for (uint32_t i = 0; i < this->_c.size() - 1; ++i) {
+		unpair = this->_c[i].unpair(size >> 1);
+		sorted.push_back(unpair);
+	}
+	if (this->_c.back().size() == size) {
+		unpair = this->_c.back().unpair(size >> 1);
+		sorted.push_back(unpair);
+	} else {
+		remainder = this->_c.back();
+		this->_c.pop_back();
+	}
+
+	sorted.insert(sorted.begin(), this->_c.front());
+	uint32_t j = 1;
+	while (PmergeMe<T>::jacobsthals[j - 1] < this->_c.size()) {
+		uint32_t	end = PmergeMe<T>::jacobsthals[j - 1];
+		// std::cout << jacobsthals[j] << "=" << jacobsthals[j - 1] << " | ";
+		// this->_display("\tJACOB: ", sorted);
+		
+		for (uint32_t start = PmergeMe<T>::jacobsthals[j] - 1; start >= end; --start) {
+			uint32_t offset= 0;
+			// std::cout << "\tjacob=" << start;
+			if (start >= this->_c.size()) {
+				// std::cout << " outofrange (size=" << this->_c.size() << ")" << std::endl;
+				continue;
+			} else if (this->_c[start].size() == (size >> 1)) {
+				typename T<Element<T>, std::allocator<Element<T> > >::reverse_iterator	it = sorted.rbegin();
+				int i = 0;
+				while (it != sorted.rend()) {
+					std::cout << it->value() << " ";
+					++i;
+					++it;	
+				}
+				std::cout << i << std::endl;
+				// std::cout << " inserting " << this->_c[start].value() << "| PAR= " << (sorted.begin() + (start * 2))->value() << std::endl;
+				sorted.insert(std::lower_bound(sorted.begin(), sorted.begin() + start + 3, this->_c[start]), this->_c[start]);
+				// this->_display("\tsorted->: ", sorted);
 			}
-			this->_c.insert(std::lower_bound(this->_c.begin(), this->_c.begin() + i, element), element);
-			element.clear();
-			// this->_display("\t\t THEN:   ");
+			++offset;
+		}		
+		// std::cout << std::endl;
+		j++;
+	}
+	
+	if (remainder.size()) {
+		if (remainder.size() >= (size >> 1)) {
+			unpair = remainder.unpair(size >> 1);
+			sorted.insert(std::lower_bound(sorted.begin(), sorted.end(), unpair), unpair);
+		}
+		if (remainder.size()) {
+			sorted.push_back(remainder);
 		}
 	}
-	// this->_c = sorted;
-	// (void)size;
-	// this->_display("END-> ");
+	this->_c = sorted;
+	
+	this->_display("END-> ");
+	std::cout << std::endl;
 }
 
 template <template <typename, typename> class T>
@@ -132,6 +171,17 @@ void	PmergeMe<T>::_display(const std::string &str) const {
 		std::cout << " ";
 	}
 	std::cout << (this->isSorted() ? "✅" : "❌") << std::endl;
+}
+
+template <template <typename, typename> class T>
+void	PmergeMe<T>::_display(const std::string &str, const T<Element<T>, std::allocator<Element<T> > > &sorted) const {
+	std::cout << str;
+	for(uint32_t i = 0; i < sorted.size(); ++i) {
+		sorted[i].display();
+		std::cout << " ";
+	}
+	std::cout << std::endl;
+	// std::cout << (this->isSorted() ? "✅" : "❌") << std::endl;
 }
 
 /* ************************************************************************** */

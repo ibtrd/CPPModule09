@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 05:45:19 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/17 00:08:04 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/18 00:33:12 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool	Element<T>::operator>(const Element &other) const {
 
 template <template <typename, typename> class T>
 void	Element<T>::_sort(void) {
-	if (this->_e[0] > this->_e[this->pairSize()]) {
+	if (this->_e.front() > this->_e[this->pairSize()]) {
 		return;
 	}
 	for (uint32_t i = 0; i < this->pairSize(); ++i) {
@@ -80,30 +80,22 @@ void	Element<T>::pair(const Element &other) {
 }
 
 template <template <typename, typename> class T>
-void	Element<T>::depair(Element &other) {
-	const uint32_t size = this->pairSize();
+Element<T>	Element<T>::unpair(const uint32_t size) {
+	Element<T>	unpair;
 
 	for (uint32_t i = 0; i < size; ++i) {
-		other._e.push_back(this->_e[size + i]);
-	}
-	for (uint32_t i = 0; i < size; ++i) {
-		this->_e.pop_back();
-	}
-}
-
-template <template <typename, typename> class T>
-void	Element<T>::depair(Element &other, const uint32_t size) {
-	for (uint32_t i = 0; i < size; ++i) {
-		other._e.push_back(this->_e.front());
+		unpair._e.push_back(this->_e.front());
 		this->_e.erase(this->_e.begin());
 	}
+	unpair.parent = this->value();
+	this->parent = unpair.value();
+	return (unpair);
 }
-
 
 template <template <typename, typename> class T>
 void	Element<T>::display(void) const {
 	if (this->_e.size() == 1) {
-		std::cout << this->_e[0];
+		std::cout << this->_e.front();
 	} else {
 		std::cout << "[ ";
 		for (uint32_t i = 0; i < this->_e.size(); ++i) {
@@ -112,12 +104,6 @@ void	Element<T>::display(void) const {
 		std::cout << "]";
 	}
 }
-
-template <template <typename, typename> class T>
-void	Element<T>::clear(void) {
-	this->_e.clear();
-}
-
 
 /* GETTERS ****************************************************************** */
 
@@ -133,7 +119,5 @@ uint32_t	Element<T>::pairSize(void) const {
 
 template <template <typename, typename> class T>
 uint32_t	Element<T>::value(void) const {
-	return (this->_e[0]);
+	return (this->_e.front());
 }
-
-/* EXCEPTIONS *************************************************************** */
