@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:58:22 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/12 20:46:11 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/20 23:54:48 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,18 @@ void BitcoinExchange::_parseDatabase(const std::string &path) {
 	} while (infile.good());
 }
 
-void	BitcoinExchange::parseQueryFile(const std::string &path) const {
+int8_t	BitcoinExchange::parseQueryFile(const std::string &path) const {
 	std::ifstream	infile(path.c_str());
 	std::string		line;
 
 	if (!infile.is_open()) {
 		std::cout << "Error: could not open file." << std::endl;
-		return ;
+		return (-1);
 	}
 	std::getline(infile, line);
 	if (line.compare("date | value")) {
 		std::cout << "Error: invalid input file." << std::endl;
-		return ;
+		return (-1);
 	}
 
 	while (!std::getline(infile, line).eof()) {
@@ -91,6 +91,7 @@ void	BitcoinExchange::parseQueryFile(const std::string &path) const {
 		}
 		this->_evaluateQuery(line);
 	}
+	return (0);
 }
 
 void	BitcoinExchange::_evaluateQuery(const std::string &str) const {

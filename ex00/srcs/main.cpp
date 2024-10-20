@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 21:59:17 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/12 15:25:26 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/20 23:56:18 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@ int main(int ac, char **av)
 	BitcoinExchange	btc;
 
 	try {
-		btc = BitcoinExchange("database/data.csv");
+		btc = BitcoinExchange("./data.csv");
 	} catch (std::exception &e) {
 		std::cout << "Error: " << e.what() << std::endl;
 		return (1);
 	}
-	btc.parseQueryFile(av[1]);
-	return 0;
+	return (btc.parseQueryFile(av[1]) != 0);
 }

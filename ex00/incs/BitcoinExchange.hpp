@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 20:58:24 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/12 17:45:23 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/20 23:55:41 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class BitcoinExchange
 
 		BitcoinExchange	&operator=(const BitcoinExchange &other);
 
-		void	parseQueryFile(const std::string &path) const;
+		int8_t	parseQueryFile(const std::string &path) const;
 
 		class InvalidDatabaseException : public std::exception {
 			const char* what(void) const throw();
