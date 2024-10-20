@@ -6,7 +6,7 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 04:40:59 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/20 03:23:58 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/20 05:18:19 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,7 @@ template <template <typename, typename> class T>
 void	PmergeMe<T>::_display(const std::string &str) const {
 	std::cout << str;
 	for(uint32_t i = 0; i < this->_c.size(); ++i) {
-		this->_c[i].display();
-		std::cout << " ";
+		std::cout << this->_c[i].value() << " ";
 	}
 	std::cout << (this->isSorted() ? "✅" : "❌") << std::endl;
 }
