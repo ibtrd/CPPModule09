@@ -6,14 +6,15 @@
 /*   By: ibertran <ibertran@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 03:04:51 by ibertran          #+#    #+#             */
-/*   Updated: 2024/10/12 15:55:48 by ibertran         ###   ########lyon.fr   */
+/*   Updated: 2024/10/22 13:35:22 by ibertran         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DATE_HPP
 # define DATE_HPP
 
-#include <stdint.h>
+# include <stdint.h>
+# include <string>
 
 class Date
 {
